@@ -4,7 +4,7 @@ const { logErrors, errorHandler, boomErrorHandler } = require('./middlewares/err
 const cors = require('cors');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 
 app.use(express.json());
@@ -12,7 +12,7 @@ app.use(express.json());
 const whiteList = ['http://localhost:8080', 'https://myapp.com'];
 const options = {
   origin: (origin, callback) => {
-    if(whiteList.includes(origin)){
+    if(whiteList.includes(origin) || !origin){
       callback(null, true)
     }else{
       callback(new Error('No permitido'))
@@ -21,11 +21,11 @@ const options = {
 }
 app.use(cors(options));
 
-app.get('/', (req, res) => {
+app.get('/api', (req, res) => {
   res.send('Hola mi primer server en express');
 })
 
-app.get('/nueva-ruta', (req, res) => {
+app.get('/api/nueva-ruta', (req, res) => {
   res.send('Hola soy una nueva ruta');
 })
 
